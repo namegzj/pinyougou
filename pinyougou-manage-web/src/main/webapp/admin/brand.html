@@ -14,50 +14,10 @@
     <script src="../plugins/angularjs/angular.min.js"></script>
     <script src="../plugins/angularjs/pagination.js"></script>
     <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
-
-    <script type="text/javascript">
-        //定义模块
-        var app = angular.module("pinyougou", ["pagination"]);
-        //定义处理器
-        app.controller("brandController", function ($scope, $http) {
-            $scope.findAll = function () {
-                // 发送请求到后台获取数据
-                $http.get("../brand/findAll.do").success(function (response) {
-                    //将返回结果设置到一个上下文变量中
-                    $scope.list = response;
-                }).error(function () {
-                    alert("数据加载失败")
-                });
-            }
-
-                // 初始化分页参数
-                $scope.paginationConf = {
-                    currentPage: 1,// 当前页号
-                    totalItems: 10,// 总记录数
-                    itemsPerPage: 10,// 页大小
-                    perPageOptions: [10, 20, 30, 40, 50],// 可选择的每页大小
-                    onChange: function () {// 当上述的参数发生变化了后触发
-                        $scope.reloadList();
-                    }
-                };
-
-                $scope.reloadList = function () {
-                    $scope.findPage($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
-                };
-                //分页查询数据
-                $scope.findPage = function (pageNo, rows) {
-                    $http.get("../brand/findPage.do?pageNo=" + pageNo + "&rows=" + rows).success(function (response) {
-                        //response是分页对象（列表，总记录数）
-                        $scope.list = response.rows;
-                        //给分页组件重新设置最新的总记录数
-                        $scope.paginationConf.totalItems = response.total;
-
-                    });
-                };
-            }
-        );
-
-    </script>
+    <script src="../js/base_pagination.js"></script>
+    <script src="../js/service/brandService.js"></script>
+    <script src="../js/controller/baseController.js"></script>
+    <script src="../js/controller/brandController.js"></script>
 
 </head>
 <body ng-app="pinyougou" ng-controller="brandController"
@@ -77,9 +37,9 @@
             <div class="form-group form-inline">
                 <div class="btn-group">
                     <button type="button" class="btn btn-default" title="新建" data-toggle="modal"
-                            data-target="#editModal"><i class="fa fa-file-o"></i> 新建
+                            data-target="#editModal" ng-click="entity={}"><i class="fa fa-file-o"></i> 新建
                     </button>
-                    <button type="button" class="btn btn-default" title="删除"><i class="fa fa-trash-o"></i> 删除</button>
+                    <button type="button" class="btn btn-default" title="删除" ng-click="delete()"><i class="fa fa-trash-o" ></i> 删除</button>
                     <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
                             class="fa fa-refresh"></i> 刷新
                     </button>
@@ -88,18 +48,18 @@
         </div>
         <div class="box-tools pull-right">
             <div class="has-feedback">
-                品牌名称：<input> 品牌首字母：<input>
-                <button class="btn btn-default">查询</button>
+                品牌名称：<input ng-model="searchEntity.name"> 品牌首字母：<input ng-model="searchEntity.firstChar">
+                <button class="btn btn-default" ng-click="reloadList()">查询</button>
             </div>
         </div>
         <!--工具栏/-->
 
         <!--数据列表-->
-        <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+        <table id="datal" class="table table-bordered table-striped table-hover dataTable">
             <thead>
             <tr>
                 <th class="" style="padding-right:0px">
-                    <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                    <input id="selall" type="checkbox" class="icheckbox_square-blue" >
                 </th>
                 <th class="sorting_asc">品牌ID</th>
                 <th class="sorting">品牌名称</th>
@@ -109,12 +69,12 @@
             </thead>
             <tbody>
             <tr ng-repeat="entity in list">
-                <td><input type="checkbox"></td>
+                <td><input type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
                 <td>{{entity.id}}</td>
                 <td>{{entity.name}}</td>
                 <td>{{entity.firstChar}}</td>
                 <td class="text-center">
-                    <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal">修改
+                    <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" ng-click="findOne(entity.id)">修改
                     </button>
                 </td>
             </tr>
@@ -145,16 +105,16 @@
                 <table class="table table-bordered table-striped" width="800px">
                     <tr>
                         <td>品牌名称</td>
-                        <td><input class="form-control" placeholder="品牌名称"></td>
+                        <td><input class="form-control" placeholder="品牌名称" ng-model="entity.name"></td>
                     </tr>
                     <tr>
                         <td>首字母</td>
-                        <td><input class="form-control" placeholder="首字母"></td>
+                        <td><input class="form-control" placeholder="首字母" ng-model="entity.firstChar"></td>
                     </tr>
                 </table>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">保存</button>
+                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="save()">保存</button>
                 <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
             </div>
         </div>
