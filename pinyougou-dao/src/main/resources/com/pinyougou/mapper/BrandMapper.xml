@@ -7,4 +7,7 @@
         SELECT * FROM tb_brand
     </select>
 
+    <select id="selectOptionList" resultType="map">
+        SELECT id,name as text FROM tb_brand
+    </select>
 </mapper>

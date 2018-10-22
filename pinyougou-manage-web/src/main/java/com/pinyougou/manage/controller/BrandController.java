@@ -9,6 +9,7 @@ import com.pinyougou.vo.Result;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/brand")
 @RestController
@@ -81,5 +82,15 @@ public class BrandController {
                                @RequestParam(value = "rows", defaultValue = "10")Integer rows){
         return brandService.search(brand, pageNo, rows);
     }
+
+    /**
+     * 品牌列表下拉
+     * @return
+     */
+    @GetMapping("/selectOptionList")
+    public List<Map<String,String>> selectOptionList() {
+        return brandService.selectOptionList();
+    }
+
 
 }

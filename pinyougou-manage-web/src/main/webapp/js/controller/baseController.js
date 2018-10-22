@@ -1,5 +1,5 @@
 //定义处理器
-app.controller("brandController", function ($scope) {
+app.controller("baseController", function ($scope) {
     // 初始化分页参数
     $scope.paginationConf = {
         currentPage: 1,// 当前页号
@@ -26,4 +26,24 @@ app.controller("brandController", function ($scope) {
             $scope.selectedIds.splice(index, 1);
         }
     };
+
+    //将一个json列表字符串中的某个属性的值串起来并返回
+    $scope.jsonToString = function (jsonListStr, key) {
+        var str = "";
+        //将json字符串转换为js对象
+        var jsonArray = JSON.parse(jsonListStr);
+        for (var i = 0; i < jsonArray.length; i++) {
+            var jsonObj = jsonArray[i];
+
+            if(str.length > 0){
+                str += "," + jsonObj[key];
+            } else {
+                str = jsonObj[key];
+            }
+        }
+
+        return str;
+    };
+
+
 })
