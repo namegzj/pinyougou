@@ -61,4 +61,13 @@
         </authentication-provider>
     </authentication-manager>
 
+
+    <!--  配置文件上传解析器  -->
+    <beans:bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <beans:property name="defaultEncoding" value="UTF-8"/>
+        <!--  设定文件上传的最大值 5MB ， 5*1024*1024 -->
+        <beans:property name="maxUploadSize" value="5242880"/>
+    </beans:bean>
+
 </beans:beans>
