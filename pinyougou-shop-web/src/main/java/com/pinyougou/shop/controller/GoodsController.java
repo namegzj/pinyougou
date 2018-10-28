@@ -45,14 +45,21 @@ public class GoodsController {
     }
 
     @GetMapping("/findOne")
-    public TbGoods findOne(Long id) {
-        return goodsService.findOne(id);
+    public Goods findOne(Long id) {
+        return goodsService.findGoodsById(id);
     }
 
     @PostMapping("/update")
-    public Result update(@RequestBody TbGoods goods) {
+    public Result update(@RequestBody Goods goods) {
         try {
-            goodsService.update(goods);
+            TbGoods tbGoods = goodsService.findOne(goods.getGoods().getId());
+            //当前登录用户
+            String name = SecurityContextHolder.getContext().getAuthentication().getName();
+            //判断是否同一个商家
+            if (name.equals(goods.getGoods().getSellerId()) && name.equals(tbGoods.getSellerId())){
+
+            goodsService.updateGoods(goods);
+            }
             return Result.ok("修改成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,7 +88,32 @@ public class GoodsController {
     @PostMapping("/search")
     public PageResult search(@RequestBody TbGoods goods, @RequestParam(value = "page", defaultValue = "1")Integer page,
                              @RequestParam(value = "rows", defaultValue = "10")Integer rows) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        goods.setSellerId(name);
+
         return goodsService.search(page, rows, goods);
     }
 
+    @GetMapping("/updateStatus")
+    public Result updateStatus(Long [] ids,String status) {
+
+        try {
+            goodsService.updateStatus(ids, status);
+            return Result.ok("更新商品状态成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.fail("更新商品状态失败");
+        }
+    }
+
+    @GetMapping("/updateMarketable")
+    public Result updateMarketable(Long[] ids, String marketable) {
+        try {
+            goodsService.updateMarketable(ids,marketable);
+            return Result.ok("更新商品状态成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.fail("更新商品状态失败");
+        }
+    }
 }
