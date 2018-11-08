@@ -15,6 +15,14 @@
         <module>pinyougou-sellergoods</module>
         <module>pinyougou-manage-web</module>
         <module>pinyougou-shop-web</module>
+        <module>pinyougou-content</module>
+        <module>pinyougou-portal-web</module>
+        <module>pinyougou-solr-import</module>
+        <module>pinyougou-search</module>
+        <module>pinyougou-search-web</module>
+        <module>pinyougou-item-web</module>
+        <module>pinyougou-user</module>
+        <module>pinyougou-user-web</module>
     </modules>
 
     <properties>
@@ -39,7 +47,7 @@
         <commons.fileupload.version>1.3.1</commons.fileupload.version>
         <fastdfs.client.version>1.25</fastdfs.client.version>
         <freemarker.version>2.3.23</freemarker.version>
-        <activemq.version>5.14.3</activemq.version>
+        <activemq.version>5.14.5</activemq.version>
         <cas.client.core.version>3.4.1</cas.client.core.version>
         <spring.data.solr.version>1.5.5.RELEASE</spring.data.solr.version>
         <httpclient.version>4.5.3</httpclient.version>

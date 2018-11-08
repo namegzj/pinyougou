@@ -236,6 +236,7 @@ app.controller("goodsController", function ($scope, $controller, $location, good
     $scope.marketableStatus = ["下架","上架"];
 
     $scope.updateMarketable =function (marketable) {
+        if (goodsService.updateStatus($scope.selectedIds, status) == "2") {
 
             if ($scope.selectedIds.length < 1) {
                 alert("请先选择商品");
@@ -252,7 +253,10 @@ app.controller("goodsController", function ($scope, $controller, $location, good
                     }
                 });
             }
-
+        }else{
+            alert("请先审核商品");
+            return;
+        }
     };
 
 
