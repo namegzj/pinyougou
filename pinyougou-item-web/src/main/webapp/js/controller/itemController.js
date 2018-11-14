@@ -63,11 +63,11 @@ app.controller("itemController", function ($scope, $http) {
     };
 
     $scope.addToCart = function () {
-        $http.get("http://cart.pinyougou.com/cart/addItemToCartList.do?itemId="
+        $http.get("http://cart.pyg.com/cart/addItemToCartList.do?itemId="
             + $scope.sku.id + "&num=" + $scope.num,{"withCredentials":true})
             .success(function (response) {
                 if (response.success) {
-                    location.href = "http://cart.pinyougou.com";
+                    location.href = "http://cart.pyg.com";
                 } else {
                     alert(response.message);
                 }

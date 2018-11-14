@@ -7,10 +7,13 @@ import com.pinyougou.user.service.UserService;
 import com.pinyougou.vo.PageResult;
 import com.pinyougou.vo.Result;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.PatternSyntaxException;
 
 @RequestMapping("/user")
@@ -105,6 +108,14 @@ public class UserController {
     public PageResult search(@RequestBody  TbUser user, @RequestParam(value = "page", defaultValue = "1")Integer page,
                                @RequestParam(value = "rows", defaultValue = "10")Integer rows) {
         return userService.search(page, rows, user);
+    }
+
+    @GetMapping("/getUsername")
+    public Map<String, Object> getUsername() {
+        Map<String, Object> resultMap = new HashMap<>();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        resultMap.put("username", username);
+        return resultMap;
     }
 
 }
