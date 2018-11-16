@@ -113,4 +113,37 @@ public class WeixinPayServiceImpl implements WeixinPayService {
 
         return null;
     }
+
+    @Override
+    public Map<String, String> closeOrder(String outTradeNo) {
+        try {
+            //1、封装请求参数
+            Map<String, String> paramMap = new HashMap<>();
+            //公众账号ID
+            paramMap.put("appid", appid);
+            //商户号
+            paramMap.put("mch_id", partner);
+            //随机字符串；可以使用微信提供的工具类生成
+            paramMap.put("nonce_str", WXPayUtil.generateNonceStr());
+            //签名；根据信息提交的时候可以动态生成
+            //paramMap.put("sign", "");
+            //商户订单号
+            paramMap.put("out_trade_no", outTradeNo);
+            String signedXml = WXPayUtil.generateSignedXml(paramMap, partnerkey);
+            System.out.println(signedXml);
+
+            HttpClient httpClient = new HttpClient("https://api.mch.weixin.qq.com/pay/closeorder");
+            httpClient.setXmlParam(signedXml);
+            httpClient.setHttps(true);
+            httpClient.post();
+
+            String content = httpClient.getContent();
+            System.out.println(content);
+
+            return WXPayUtil.xmlToMap(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

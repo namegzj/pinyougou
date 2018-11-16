@@ -6,4 +6,6 @@ public interface WeixinPayService {
     Map<String,String> createNative(String outTradeNo, String totalFee);
 
     Map<String,String> queryPayStatus(String outTradeNo);
+
+    Map<String,String> closeOrder(String outTradeNo);
 }
